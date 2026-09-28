@@ -156,8 +156,10 @@ bibliography style]
 \DeclareBibliographyDriver{incollection}{%
 \usebibmacro{bibindex}%
 \usebibmacro{begentry}%
-% Chapter author
-\printnames{author}%
+% Chapter author if available, editor otherwise
+\ifnameundef{author}
+  {\printnames{editor}}
+  {\printnames{author}}%
 \setunit{\addspace}%
 % Year, including a/b disambiguation
 \iffieldundef{labelyear}
