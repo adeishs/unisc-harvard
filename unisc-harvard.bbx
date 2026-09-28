@@ -1,0 +1,253 @@
+\ProvidesFile{unisc-harvard.bbx}[UniSC Harvard 8th edition (June 2022 update)
+bibliography style]
+
+\RequireBibliographyStyle{ext-authoryear}
+
+\ExecuteBibliographyOptions{
+  giveninits=true,
+  uniquename=false,
+  uniquelist=false,
+  maxbibnames=99,
+  minbibnames=99,
+  dashed=false,
+  doi=true,
+  url=true,
+  urldate=long,
+  dateabbrev=false,
+  isbn=false,
+  eprint=false,
+}
+
+% Names: Smith, J, White, J & Brown, L
+\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{author}{family-given}
+\renewcommand*{\bibinitperiod}{}
+\renewcommand*{\bibinitdelim}{}
+\DeclareDelimFormat[bib]{multinamedelim}{\addcomma\addspace}
+\DeclareDelimFormat[bib]{finalnamedelim}{\addnbspace\&\addspace}
+\DeclareNameFormat{unisc-editor}{%
+  \nameparts{#1}%
+  \usebibmacro{name:given-family}
+  {\namepartfamily} {\namepartgiveni} {\namepartprefix} {\namepartsuffix}
+  \usebibmacro{name:andothers}%
+}
+\DeclareDelimFormat[unisc-editor]{multinamedelim}{\addcomma\space}
+\DeclareDelimFormat[unisc-editor]{finalnamedelim}{\space\&\space}
+
+% Author Year,
+\renewcommand*{\labelnamepunct}{\addnbspace}
+\renewbibmacro*{date+extradate}{%
+  \iffieldundef{labelyear}
+    {\printtext{\bibstring{nodate}}}
+    {\printtext[labeldate]{%
+       \printfield{labelyear}%
+       \printfield{extradate}}}%
+  \addcomma\space}
+
+% Article titles: sentence case in single quotation marks.
+% Journal titles retain database capitalisation and are italicised.
+\DeclareFieldFormat[article]{titlecase}{\MakeSentenceCase*{#1}}
+\DeclareFieldFormat[article]{title}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{journaltitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[inproceedings,thesis,unpublished]{title}{%
+\mkbibquote{\MakeSentenceCase*{#1}}%
+}
+\DeclareFieldFormat[report,manual,online]{title}{%
+\mkbibemph{\MakeSentenceCase*{#1}}%
+}
+\DeclareFieldFormat[incollection]{titlecase}{\MakeSentenceCase*{#1}}
+\DeclareFieldFormat[incollection]{title}{\mkbibquote{\MakeSentenceCase*{#1}}}
+\DeclareFieldFormat[incollection]{booktitle}{\mkbibemph{\MakeSentenceCase*{#1}}}
+\DeclareFieldFormat[book]{title}{\mkbibemph{\MakeSentenceCase*{#1}}}
+\DeclareFieldFormat[book]{edition}{\mkbibordedition{#1}\addspace edn}
+
+% Preserve journal-title capitalisation and italicise it
+\renewbibmacro*{journal}{%
+  \iffieldundef{journaltitle}
+    {}
+    {%
+      \printtext{\mkbibemph{\thefield{journaltitle}}}%
+      \iffieldundef{journalsubtitle}
+      {}
+      {%
+        \setunit{\subtitlepunct}
+        \printtext{\mkbibemph{\thefield{journalsubtitle}}}
+      }
+    }
+}
+
+% Journal articles do not use "in:" and do not print inherited editors.
+\renewbibmacro*{in:}{%
+  \ifentrytype{article}
+    {}
+    {\printtext{\bibstring{in}\intitlepunct}}%
+}
+\AtEveryBibitem{\ifentrytype{article}{\clearname{editor}}{}}
+
+% Journal, vol. 28, no. 1
+\DeclareFieldFormat[article]{volume}{\bibstring{volume}\addspace#1}
+\DeclareFieldFormat[article]{number}{\bibstring{number}\addspace#1}
+\renewbibmacro*{volume+number+eid}{%
+\printfield{volume}%
+\setunit{\addcomma\space}%
+\printfield{number}%
+\setunit{\addcomma\space}%
+\printfield{eid}%
+}
+\renewbibmacro*{journal+issuetitle}{%
+\usebibmacro{journal}%
+\setunit*{\addcomma\space}%
+\usebibmacro{volume+number+eid}%
+\setunit{\addspace}%
+\usebibmacro{issue+date}%
+\setunit{\addcolon\space}%
+\usebibmacro{issue}%
+\newunit%
+}
+
+% Pages, DOI and URL
+\DeclareFieldFormat{pages}{\mkpageprefix[bookpagination]{#1}}
+\DeclareFieldFormat{doi}{\textnormal{doi}\addcolon\nolinkurl{#1}}
+\DeclareFieldFormat{url}{\nolinkurl{#1}}
+\DeclareFieldFormat{urldate}{%
+\bibstring{urlseen}\space
+\stripzeros{\thefield{urlday}}\space
+\mkbibmonth{\thefield{urlmonth}}\space
+\thefield{urlyear}}
+\renewbibmacro*{url+urldate}{%
+  \iffieldundef{urlyear}
+    {}
+    {\printurldate \setunit{\addcomma\space}}%
+  \printfield{url}}
+\DefineBibliographyStrings{english}{
+  urlseen={viewed},
+  volume={vol\adddot},
+  number={no\adddot},
+  page={p\adddot},
+  pages={pp\adddot},
+  andothers={et\addabbrvspace al\adddot}
+}
+
+\renewcommand*{\newunitpunct}{\addcomma\space}
+\renewcommand*{\finentrypunct}{%
+  \iffieldundef{doi}
+    {\iffieldundef{url}
+      {\addperiod}
+      {}
+    }
+    {}
+  }
+
+% Prevent hyphenation within names
+\renewcommand*{\mkbibnamefamily}[1]{\mbox{#1}}
+\renewcommand*{\mkbibnamegiven}[1]{\mbox{#1}}
+
+% Allow slightly more flexible spacing in bibliography lines
+\renewcommand*{\bibsetup}{%
+  \interlinepenalty=5000\relax
+  \widowpenalty=10000\relax
+  \clubpenalty=10000\relax
+  \sloppy}
+
+\setlength{\bibhang}{0pt}
+\setlength{\bibitemsep}{\baselineskip}
+\AtBeginBibliography{\setlength{\parindent}{0pt}}
+
+\DeclareBibliographyDriver{incollection}{%
+\usebibmacro{bibindex}%
+\usebibmacro{begentry}%
+% Chapter author
+\printnames{author}%
+\setunit{\addspace}%
+% Year, including a/b disambiguation
+\iffieldundef{labelyear}
+  {\printtext{\bibstring{nodate}}}
+  {\printtext[labeldate]{%
+    \printfield{labelyear}%
+    \printfield{extradate}}}%
+\setunit{\addcomma\space}%
+% Chapter title
+\printfield[title]{title}%
+\setunit{\addcomma\space}%
+% in Editor/s (ed./eds)
+\printtext{in\space}%
+\printnames[unisc-editor]{editor}%
+\setunit{\addspace}%
+\printtext{\mkbibparens{%
+  \ifnumgreater{\value{editor}}{1}
+    {eds}
+    {ed\adddot}}}%
+\setunit{\addcomma\space}%
+% Edited-book title
+\printfield[booktitle]{booktitle}%
+% Edition, if present
+\iffieldundef{edition}
+  {}
+  {\setunit{\addcomma\space}%
+    \printfield{edition}%
+    \addspace
+    \bibstring{edition}}%
+% Publisher
+\iflistundef{publisher}
+  {}
+  {\setunit{\addcomma\space}%
+    \printlist{publisher}}%
+% Publication location
+\iflistundef{location}
+  {}
+  {\setunit{\addcomma\space}%
+    \printlist{location}}%
+% Page range
+\iffieldundef{pages}
+  {}
+  {\setunit{\addcomma\space}%
+    \printfield{pages}}%
+% DOI, eprint or URL/access date
+\newunit\newblock
+\usebibmacro{doi+eprint+url}%
+\usebibmacro{finentry}%
+}
+
+\DeclareBibliographyDriver{book}{%
+\usebibmacro{bibindex}%
+\usebibmacro{begentry}%
+% Author or editor
+\ifnameundef{author}
+  {\printnames{editor}}
+  {\printnames{author}}%
+\setunit{\addspace}%
+% Year
+\iffieldundef{labelyear}
+  {\printtext{\bibstring{nodate}}}
+  {\printtext[labeldate]{%
+\printfield{labelyear}%
+\printfield{extradate}}}%
+\setunit{\addcomma\space}%
+% Book title and subtitle
+\printfield[title]{title}%
+\iffieldundef{subtitle}
+  {}
+  {\setunit{\subtitlepunct}%
+\printfield[title]{subtitle}}%
+% Edition
+\iffieldundef{edition}
+  {}
+  {\setunit{\addcomma\space}%
+\printfield{edition}}%
+% Publisher
+\iflistundef{publisher}
+  {}
+  {\setunit{\addcomma\space}%
+\printlist{publisher}}%
+% Place of publication
+\iflistundef{location}
+  {}
+  {\setunit{\addcomma\space}%
+\printlist{location}}%
+% DOI or URL, where applicable
+\newunit\newblock
+\usebibmacro{doi+eprint+url}%
+\usebibmacro{finentry}%
+}
+
+\endinput

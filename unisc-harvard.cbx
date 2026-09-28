@@ -1,0 +1,21 @@
+\ProvidesFile{unisc-harvard.cbx}[UniSC Harvard 8th edition (June 2022 update)
+citation style]
+\RequireCitationStyle{authoryear-comp}
+
+\ExecuteBibliographyOptions{
+  maxcitenames=3,
+  mincitenames=1,
+  sortcites=true,
+  uniquename=false,
+  uniquelist=false
+}
+
+% Parenthetical: (Smith & Jones 2025)
+\DeclareDelimFormat[parencite]{multinamedelim}{\addcomma\space}
+\DeclareDelimFormat[parencite]{finalnamedelim}{\space\&\space}
+
+% Narrative: Smith and Jones (2025)
+\DeclareDelimFormat[textcite]{multinamedelim}{\addcomma\space}
+\DeclareDelimFormat[textcite]{finalnamedelim}{\addspace\bibstring{and}\space}
+
+\endinput
