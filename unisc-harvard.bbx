@@ -213,7 +213,11 @@ bibliography style]
 \usebibmacro{begentry}%
 % Author or editor
 \ifnameundef{author}
-  {\printnames{editor}}
+  {%
+    \ifnameundef{editor}
+      {\printfield[title]{title}}
+      {\printnames{editor}}%
+  }
   {\printnames{author}}%
 \setunit{\addspace}%
 % Year
@@ -224,11 +228,17 @@ bibliography style]
 \printfield{extradate}}}%
 \setunit{\addcomma\space}%
 % Book title and subtitle
-\printfield[title]{title}%
-\iffieldundef{subtitle}
+\ifboolexpr{
+  test{\ifnameundef{author}} and test{\ifnameundef{editor}}
+}
   {}
-  {\setunit{\subtitlepunct}%
-\printfield[title]{subtitle}}%
+  {%
+    \printfield[title]{title}%
+    \iffieldundef{subtitle}
+      {}
+      {\setunit{\subtitlepunct}%
+    \printfield[title]{subtitle}}%
+  }
 % Edition
 \iffieldundef{edition}
   {}
