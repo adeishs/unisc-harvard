@@ -60,6 +60,7 @@ bibliography style]
 \DeclareFieldFormat[incollection]{booktitle}{\mkbibemph{\MakeSentenceCase*{#1}}}
 \DeclareFieldFormat[book]{title}{\mkbibemph{\MakeSentenceCase*{#1}}}
 \DeclareFieldFormat[book]{edition}{\mkbibordedition{#1}\addspace edn}
+\DeclareFieldFormat[book]{series}{\MakeSentenceCase*{#1}}
 
 % Preserve journal-title capitalisation and italicise it
 \renewbibmacro*{journal}{%
@@ -156,8 +157,10 @@ bibliography style]
 \DeclareBibliographyDriver{incollection}{%
 \usebibmacro{bibindex}%
 \usebibmacro{begentry}%
-% Chapter author
-\printnames{author}%
+% Chapter author if available, editor otherwise
+\ifnameundef{author}
+  {\printnames{editor}}
+  {\printnames{author}}%
 \setunit{\addspace}%
 % Year, including a/b disambiguation
 \iffieldundef{labelyear}
@@ -213,7 +216,11 @@ bibliography style]
 \usebibmacro{begentry}%
 % Author or editor
 \ifnameundef{author}
-  {\printnames{editor}}
+  {%
+    \ifnameundef{editor}
+      {\printfield[title]{title}}
+      {\printnames{editor}}%
+  }
   {\printnames{author}}%
 \setunit{\addspace}%
 % Year
@@ -224,11 +231,20 @@ bibliography style]
 \printfield{extradate}}}%
 \setunit{\addcomma\space}%
 % Book title and subtitle
-\printfield[title]{title}%
-\iffieldundef{subtitle}
+\ifboolexpr{
+  test{\ifnameundef{author}} and test{\ifnameundef{editor}}
+}
   {}
-  {\setunit{\subtitlepunct}%
-\printfield[title]{subtitle}}%
+  {%
+    \printfield[title]{title}%
+    \iffieldundef{subtitle}
+      {}
+      {\setunit{\subtitlepunct}%
+    \printfield[title]{subtitle}}%
+  }
+\iffieldundef{series}
+  {}
+  {\setunit{\addcomma\space}\printfield{series}}%
 % Edition
 \iffieldundef{edition}
   {}
