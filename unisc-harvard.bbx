@@ -60,6 +60,7 @@ bibliography style]
 \DeclareFieldFormat[incollection]{booktitle}{\mkbibemph{\MakeSentenceCase*{#1}}}
 \DeclareFieldFormat[book]{title}{\mkbibemph{\MakeSentenceCase*{#1}}}
 \DeclareFieldFormat[book]{edition}{\mkbibordedition{#1}\addspace edn}
+\DeclareFieldFormat[book]{series}{\MakeSentenceCase*{#1}}
 
 % Preserve journal-title capitalisation and italicise it
 \renewbibmacro*{journal}{%
