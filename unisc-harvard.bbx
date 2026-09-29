@@ -241,6 +241,9 @@ bibliography style]
       {\setunit{\subtitlepunct}%
     \printfield[title]{subtitle}}%
   }
+\iffieldundef{series}
+  {}
+  {\setunit{\addcomma\space}\printfield{series}}%
 % Edition
 \iffieldundef{edition}
   {}
