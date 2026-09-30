@@ -1,4 +1,4 @@
-# unisc-harvard — BibLaTeX style for UniSC Harvard referencing style
+# unisc-harvard — BibLaTeX package for UniSC Harvard referencing style
 © 2026 ade ishs
 
 This package is a BibLaTeX style to format reference lists in the
